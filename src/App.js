@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import { Button, Box, RadioGroup, FormControlLabel, Typography, Radio} from '@material-ui/core';
+import { Button, Box, Typography, Radio} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import AddIcon from '@material-ui/icons/Add';
@@ -87,30 +87,71 @@ function App() {
   };
   const checkRadio = selectedValue;
 
-  // const questionAllBlog = ['1','2'];
-  // const [AddQuestionBlog, setAddQuestionBlog] = useState(questionAllBlog);
-  // function handleAdd() {
-  //   const newQuestion = AddQuestionBlog.concat(1);
-  //   setList(newList);
+  // // Add question
+  // const [inputQuestion, setInputQuestion] = useState([1]);
+  // const handleChangeClick = () => {
+  //   const array = [...inputQuestion];
+  //   array.push(array.length+1);
+  //   setInputQuestion(array);
+  //   // setInputQuestion([setInputQuestion.length]);
+  //   console.log(array);
+  // };
+  // // Delete question
+  // const handleChangeDelete = () => {
+  //   const array = [...inputQuestion];
+  //   array.pop();
+  //   setInputQuestion(array);
   // }
-  const [inputQuestion, setInputQuestion] = useState([1]);
+
+
+  const [inputChoice, setInputChoice] = useState([
+    {
+      choice: 1
+    },
+    {
+      choice: 2
+    }
+  ]);
+
+  const [inputQuestion, setInputQuestion] = useState([{
+    num: 1,
+    values: []
+  }]);
   const handleChangeClick = () => {
     const array = [...inputQuestion];
-    array.push(array.length+1);
+    const choiceArray = [...inputChoice];
+    // choiceArray.push({
+    //   choice: choiceArray.length+1
+    // })
+    array.push({
+      num: array.length+1,
+      values: choiceArray
+    });
     setInputQuestion(array);
-    // setInputQuestion([setInputQuestion.length]);
+    setInputChoice(choiceArray);
+
+    console.log(choiceArray);
     console.log(array);
   };
-  const handleChangeDelete = () => {
-    const array = [...inputQuestion];
-    array.pop();
-    setInputQuestion(array);
+  // Delete question // เอา fuction ไปเขียนใน return เเทน
+  // const handleChangeDelete = () => {
+  //   const array = [...inputQuestion];
+  //   array.pop();
+  //   setInputQuestion(array);
+  // }
+
+  const handleOnChange = () => {
+    const choiceArray = [...inputChoice];
+    choiceArray.push({
+      choice: choiceArray.length+1
+    })
+    setInputChoice(choiceArray);
+    console.log(choiceArray);
   }
-  // const [questionAllBlog, setQuestionAllBlog] = useState('');
 
   return (
     <div>
-      <container>
+      <div>
         <form>
           {/* header */}
           <Box className={classes.divHeader}>
@@ -169,37 +210,40 @@ function App() {
               </Box>
             </Box>
 
+
             {inputQuestion.map((x, index) => (
               <Box 
               ml={3} mr={3} 
               bgcolor="#FFFFFF">
+                
                 <Box 
                 pt={3} pl={3} pr={3}>
                   <Box>
                     <Box 
                     component="h6"
                     className={classes.h6}>
-                      Question {index+1}
+                      Question {x.num}
                       </Box>
                     <TextField 
-                    className="TextField" 
+                    className={classes.TextField} 
                     label="Question" 
                     variant="outlined" 
                     required/>
                   </Box>
 
+                  {inputChoice.map((y, index) => (
                   <Box 
                   display="flex" 
                   flexDirection="row" 
                   alignItems="center" 
                   mt={3}>
                     <Radio 
-                    checked={selectedValue === '1'} 
-                    value='1' 
+                    checked={selectedValue === y.choice} 
+                    value={y.choice}
                     color="primary" 
                     name="radio-question" 
                     onChange={handleChange}/>
-                    {checkRadio == 1 ? 
+                    {checkRadio === y.choice ? 
                     <TextField 
                     className={classes.TextField} 
                     label="Description" 
@@ -212,9 +256,18 @@ function App() {
                     label="Description" 
                     variant="outlined" 
                     required/>}
-                    <DeleteOutlineIcon style={{marginLeft: '24px'}}/>
+                    <DeleteOutlineIcon style={{marginLeft: '24px'}}
+                    onClick={()=> {
+                      const choiceArray = [...inputChoice];
+                      choiceArray.pop(index);
+                      setInputChoice(choiceArray);
+                      console.log(choiceArray);
+                    } 
+                    }/>
                   </Box>
-                  <Box 
+                  ))}
+
+                  {/* <Box 
                   display="flex" 
                   flexDirection="row" 
                   alignItems="center" 
@@ -239,7 +292,7 @@ function App() {
                     variant="outlined" 
                     required/>}
                     <DeleteOutlineIcon style={{marginLeft: '24px'}}/>
-                  </Box>
+                  </Box> */}
                 </Box>
 
                 {/* add choice */}
@@ -254,7 +307,8 @@ function App() {
                   className={classes.elementCursor}>
                     <AddIcon style={{ color: '#FF5C00' }} />
                     <Typography
-                    className={classes.p}>
+                    className={classes.p}
+                    onClick={handleOnChange}>
                       ADD CHOICE
                     </Typography>
                   </Box>
@@ -303,8 +357,8 @@ function App() {
                     const array = [...inputQuestion];
                     array.pop(index);
                     setInputQuestion(array);
-                  }
-                    
+                    console.log(array);
+                  } 
                   }>
                     <DeleteOutlineIcon />
                     <Typography 
@@ -338,7 +392,7 @@ function App() {
                 </Button>
               </Box>
         </form>
-      </container>
+      </div>
     </div>
   );
 }
