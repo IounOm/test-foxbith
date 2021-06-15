@@ -140,6 +140,22 @@ function App() {
   //   setInputQuestion(array);
   // }
 
+  // const handleOnChange = () => {
+  //   const array = [...inputQuestion];
+  //   const choiceArray = [...inputChoice];
+  //   choiceArray.push({
+  //     choice: choiceArray.length+1
+  //   })
+  //   setInputChoice(choiceArray);
+  //   array.push({
+  //     num: array.length,
+  //     values: choiceArray
+  //   })
+
+  //   setInputQuestion(array);
+  //   console.log(array);
+  // }
+
   const handleOnChange = () => {
     const choiceArray = [...inputChoice];
     choiceArray.push({
@@ -238,12 +254,12 @@ function App() {
                   alignItems="center" 
                   mt={3}>
                     <Radio 
-                    checked={selectedValue === y.choice} 
-                    value={y.choice}
+                    checked={selectedValue == x.values} 
+                    value={x.values}
                     color="primary" 
                     name="radio-question" 
                     onChange={handleChange}/>
-                    {checkRadio === y.choice ? 
+                    {checkRadio == x.values ? 
                     <TextField 
                     className={classes.TextField} 
                     label="Description" 
@@ -358,7 +374,8 @@ function App() {
                     array.pop(index);
                     setInputQuestion(array);
                     console.log(array);
-                  } 
+                  }
+                    
                   }>
                     <DeleteOutlineIcon />
                     <Typography 
