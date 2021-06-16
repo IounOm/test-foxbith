@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import zIndex from '@material-ui/core/styles/zIndex';
 // import { ClassSharp } from '@material-ui/icons';
 
 
@@ -83,7 +84,7 @@ function App() {
   const [selectedValue, setSelectedValue] = useState('1');
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
-    console.log(selectedValue);
+    console.log(selectedValue.value);
   };
   const checkRadio = selectedValue;
 
@@ -106,31 +107,33 @@ function App() {
 
   const [inputChoice, setInputChoice] = useState([
     {
-      choice: 1
+      questionBlog: 1,
+      choice: ''
     },
     {
-      choice: 2
+      questionBlog: 2,
+      choice: ''
     }
   ]);
 
   const [inputQuestion, setInputQuestion] = useState([{
-    num: 1,
-    values: []
+    Qid: 1,
+    questionHeader: ''
   }]);
   const handleChangeClick = () => {
     const array = [...inputQuestion];
-    const choiceArray = [...inputChoice];
+    // const choiceArray = [...inputChoice];
     // choiceArray.push({
     //   choice: choiceArray.length+1
     // })
     array.push({
-      num: array.length+1,
-      values: choiceArray
+      Qid: array.length+1,
+      questionHeader: ''
     });
     setInputQuestion(array);
-    setInputChoice(choiceArray);
+    // setInputChoice(choiceArray);
 
-    console.log(choiceArray);
+    // console.log(choiceArray);
     console.log(array);
   };
   // Delete question // เอา fuction ไปเขียนใน return เเทน
@@ -140,7 +143,7 @@ function App() {
   //   setInputQuestion(array);
   // }
 
-  // const handleOnChange = () => {
+  // const handleAddChoice = () => {
   //   const array = [...inputQuestion];
   //   const choiceArray = [...inputChoice];
   //   choiceArray.push({
@@ -148,7 +151,7 @@ function App() {
   //   })
   //   setInputChoice(choiceArray);
   //   array.push({
-  //     num: array.length,
+  //     Qid: array.length,
   //     values: choiceArray
   //   })
 
@@ -156,11 +159,35 @@ function App() {
   //   console.log(array);
   // }
 
-  const handleOnChange = () => {
+//   const handleChangeQuestionHeader = (e) => {
+//     const Qid = e.target.name - 1;
+//     const questionHeader = e.target.value;
+//     setInputQuestion({...inputQuestion ,Qid: Qid,  questionHeader: questionHeader});
+//     console.log(inputQuestion);
+//  };
+
+  const handleChangeQuestionHeader = (e) => {
+    const array = [...inputQuestion];
+    const indexValue = e.target.name -1;
+    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value})
+    setInputQuestion(array);
+    console.log(array);
+  }
+
+  const handleAddChoice = (e) => {
     const choiceArray = [...inputChoice];
     choiceArray.push({
-      choice: choiceArray.length+1
+      questionBlog: '',
+      choice: ''
     })
+    setInputChoice(choiceArray);
+    console.log(choiceArray);
+  }
+  
+  const handleChangeValue = (e) => {
+    const choiceArray = [...inputChoice];
+    const indexValue = e.target.id -1;
+    choiceArray.splice(indexValue,1 ,{questionBlog: indexValue+1, choice: e.target.value});
     setInputChoice(choiceArray);
     console.log(choiceArray);
   }
@@ -227,7 +254,7 @@ function App() {
             </Box>
 
 
-            {inputQuestion.map((x, index) => (
+            {inputQuestion.flatMap((x, index) => (
               <Box 
               ml={3} mr={3} 
               bgcolor="#FFFFFF">
@@ -238,13 +265,16 @@ function App() {
                     <Box 
                     component="h6"
                     className={classes.h6}>
-                      Question {x.num}
+                      Question {x.Qid}
                       </Box>
                     <TextField 
                     className={classes.TextField} 
                     label="Question" 
-                    variant="outlined" 
-                    required/>
+                    variant="outlined"
+                    name={index+1}
+                    onChange={handleChangeQuestionHeader}
+                    // value={x.values[{index}]}
+                    required/> 
                   </Box>
 
                   {inputChoice.map((y, index) => (
@@ -254,28 +284,34 @@ function App() {
                   alignItems="center" 
                   mt={3}>
                     <Radio 
-                    checked={selectedValue == x.values} 
-                    value={x.values}
+                    checked={selectedValue == index+1} 
+                    value={index+1}
                     color="primary" 
                     name="radio-question" 
                     onChange={handleChange}/>
-                    {checkRadio == x.values ? 
+                    {checkRadio == index+1 ? 
                     <TextField 
                     className={classes.TextField} 
-                    label="Description" 
+                    label={"Description"} 
                     variant="outlined" 
-                    helperText="The answer is correct" 
+                    helperText="The answer is correct"
+                    id={index+1}
+                    value={y.choice}
+                    onChange={handleChangeValue}
                     required/>
                     : 
                     <TextField 
                     className={classes.TextField}
                     label="Description" 
-                    variant="outlined" 
+                    variant="outlined"
+                    id={index+1}
+                    value={y.choice}
+                    onChange={handleChangeValue}
                     required/>}
                     <DeleteOutlineIcon style={{marginLeft: '24px'}}
                     onClick={()=> {
                       const choiceArray = [...inputChoice];
-                      choiceArray.pop(index);
+                      choiceArray.splice(index, 1);
                       setInputChoice(choiceArray);
                       console.log(choiceArray);
                     } 
@@ -324,7 +360,8 @@ function App() {
                     <AddIcon style={{ color: '#FF5C00' }} />
                     <Typography
                     className={classes.p}
-                    onClick={handleOnChange}>
+                    id={x.Qid}
+                    onClick={handleAddChoice}>
                       ADD CHOICE
                     </Typography>
                   </Box>
@@ -371,7 +408,7 @@ function App() {
                     // setInputQuestion(array)
 
                     const array = [...inputQuestion];
-                    array.pop(index);
+                    array.splice(index, 1);
                     setInputQuestion(array);
                     console.log(array);
                   }
