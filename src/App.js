@@ -118,7 +118,8 @@ function App() {
 
   const [inputQuestion, setInputQuestion] = useState([{
     Qid: 1,
-    questionHeader: ''
+    questionHeader: '',
+    allChoice: [inputChoice]
   }]);
   const handleChangeClick = () => {
     const array = [...inputQuestion];
@@ -128,7 +129,8 @@ function App() {
     // })
     array.push({
       Qid: array.length+1,
-      questionHeader: ''
+      questionHeader: '',
+      allChoice: [inputChoice]
     });
     setInputQuestion(array);
     // setInputChoice(choiceArray);
@@ -169,7 +171,7 @@ function App() {
   const handleChangeQuestionHeader = (e) => {
     const array = [...inputQuestion];
     const indexValue = e.target.name -1;
-    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value})
+    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value, allChoice: [inputChoice]})
     setInputQuestion(array);
     console.log(array);
   }
@@ -182,14 +184,20 @@ function App() {
     })
     setInputChoice(choiceArray);
     console.log(choiceArray);
+
   }
   
   const handleChangeValue = (e) => {
     const choiceArray = [...inputChoice];
     const indexValue = e.target.id -1;
     choiceArray.splice(indexValue,1 ,{questionBlog: indexValue+1, choice: e.target.value});
-    setInputChoice(choiceArray);
-    console.log(choiceArray);
+    // setInputChoice(choiceArray);
+    // console.log(choiceArray);
+
+    const array = [...inputQuestion];
+    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value, allChoice: [choiceArray]})
+    setInputQuestion(array);
+    console.log(array);
   }
 
   return (
@@ -254,7 +262,7 @@ function App() {
             </Box>
 
 
-            {inputQuestion.flatMap((x, index) => (
+            {inputQuestion.map((x, index) => (
               <Box 
               ml={3} mr={3} 
               bgcolor="#FFFFFF">
@@ -281,7 +289,7 @@ function App() {
                   <Box 
                   display="flex" 
                   flexDirection="row" 
-                  alignItems="center" 
+                  alignItems="center"
                   mt={3}>
                     <Radio 
                     checked={selectedValue == index+1} 
@@ -296,7 +304,7 @@ function App() {
                     variant="outlined" 
                     helperText="The answer is correct"
                     id={index+1}
-                    value={y.choice}
+                    value={x.choice}
                     onChange={handleChangeValue}
                     required/>
                     : 
@@ -305,7 +313,7 @@ function App() {
                     label="Description" 
                     variant="outlined"
                     id={index+1}
-                    value={y.choice}
+                    value={x.choice}
                     onChange={handleChangeValue}
                     required/>}
                     <DeleteOutlineIcon style={{marginLeft: '24px'}}
