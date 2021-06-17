@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import zIndex from '@material-ui/core/styles/zIndex';
+// import zIndex from '@material-ui/core/styles/zIndex';
 // import { ClassSharp } from '@material-ui/icons';
 
 
@@ -81,16 +81,16 @@ function App() {
   const classes = useStyles();
 
   // for radio change
-  const [selectedValue, setSelectedValue] = useState('1');
+  const [selectedValue, setSelectedValue] = useState(1);
   const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    console.log(selectedValue.value);
+    setSelectedValue(+event.target.value);
+    // console.log(selectedValue);
   };
   const checkRadio = selectedValue;
 
   // // Add question
   // const [inputQuestion, setInputQuestion] = useState([1]);
-  // const handleChangeClick = () => {
+  // const handleAddQuestion = () => {
   //   const array = [...inputQuestion];
   //   array.push(array.length+1);
   //   setInputQuestion(array);
@@ -105,23 +105,18 @@ function App() {
   // }
 
 
-  const [inputChoice, setInputChoice] = useState([
-    {
-      questionBlog: 1,
-      choice: ''
-    },
-    {
-      questionBlog: 2,
-      choice: ''
-    }
-  ]);
+  // const [inputChoice, setInputChoice] = useState([
+  //   {
+  //     choice: ''
+  //   }
+  // ]);
 
   const [inputQuestion, setInputQuestion] = useState([{
     Qid: 1,
     questionHeader: '',
-    allChoice: [inputChoice]
+    allChoice: [{choice: ''}]
   }]);
-  const handleChangeClick = () => {
+  const handleAddQuestion = () => {
     const array = [...inputQuestion];
     // const choiceArray = [...inputChoice];
     // choiceArray.push({
@@ -130,7 +125,7 @@ function App() {
     array.push({
       Qid: array.length+1,
       questionHeader: '',
-      allChoice: [inputChoice]
+      allChoice: [{choice: ''}]
     });
     setInputQuestion(array);
     // setInputChoice(choiceArray);
@@ -168,37 +163,94 @@ function App() {
 //     console.log(inputQuestion);
 //  };
 
-  const handleChangeQuestionHeader = (e) => {
+  const handleChangeQuestionHeader = (e, i) => {
     const array = [...inputQuestion];
-    const indexValue = e.target.name -1;
-    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value, allChoice: [inputChoice]})
+    const indexValue = e.target.id -1;
+    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value, allChoice: inputQuestion[i].allChoice})
     setInputQuestion(array);
-    console.log(array);
+    // console.log(array);
   }
 
   const handleAddChoice = (e) => {
-    const choiceArray = [...inputChoice];
-    choiceArray.push({
-      questionBlog: '',
-      choice: ''
-    })
-    setInputChoice(choiceArray);
-    console.log(choiceArray);
+    // const array = [...inputQuestion];
+    // const choiceArray = [...inputChoice];
+    const Qid = e.target.id-1;
+    console.log(Qid);
 
+    // console.log("New Question1",array)
+    // array[Qid].allChoice.push(choiceArray[0]);
+    // console.log("New Question2",array)
+    // choiceArray.push({choice: ''});
+    // setInputQuestion(array);
+    
+    setInputQuestion(prev => {
+      const newPrev = [...prev];
+      newPrev.push(newPrev[Qid].allChoice[{choice: ''}]);
+      // console.log(newPrev);
+      return newPrev;
+    })
+
+    // console.log(choiceArray)
+    // array[Qid].allChoice.push(choiceArray[0]);
+    // console.log("New Question10",array)
+
+    // setInputQuestion(prev => {
+    //   const newPrev = [...prev];
+    //   console.log(choiceArray)
+    //   newPrev[Qid].allChoice.push(choiceArray[0]);
+    //   console.log("New Question10",newPrev)
+    //   return newPrev;
+    // })
+
+    // setInputQuestion(prev => {
+    //   const newPrev = [...prev];
+    //   const NewArray = newPrev[Qid].allChoice.push(choiceArray[0]);
+    //   console.log(newPrev);
+    //   return newPrev;
+    // })
+    // setInputChoice(choiceArray);
+    // console.log(array);
+    // console.log(inputChoice);
   }
   
-  const handleChangeValue = (e) => {
-    const choiceArray = [...inputChoice];
-    const indexValue = e.target.id -1;
-    choiceArray.splice(indexValue,1 ,{questionBlog: indexValue+1, choice: e.target.value});
+  const handleChangeValue = (e, j) => {
+    // const Qid = e.target.id-1;
+    // inputChoice.push({choice: e.target.value})
+    
+    // const array = [...inputQuestion];
+    // array[Qid].allChoice[j].splice(j,1 ,{choice: e.target.value});
+    // setInputQuestion(array);
+
+    // choiceArray[0]
+    console.log("indexvalue",j);
+    // setInputQuestion[i].allChoice[j].splice(j,1 ,{choice: e.target.value});
+
+    // console.log(Qid);
+    setInputQuestion(prev => {
+      // const InputChoice = [...prev]; //newInputChoice[Qid].allChoice[j].
+      // const newInputChoice = InputChoice.allChoice.splice(j,1 ,{choice: e.target.value});
+      // console.log(newInputChoice);
+      // newInputChoice.splice(j,1 ,{choice: e.target.value});
+      console.log("index",j, prev);
+      // return newInputChoice;
+    });
+
+
+    // inputChoice.splice(i,1 ,{choice: e.target.value});
+    
+    // console.log(e.target.value, i);
+    // console.log(inputChoice)
+  
+    // choiceArray.push('a')
     // setInputChoice(choiceArray);
     // console.log(choiceArray);
 
-    const array = [...inputQuestion];
-    array.splice(indexValue, 1,{Qid: indexValue + 1, questionHeader: e.target.value, allChoice: [choiceArray]})
-    setInputQuestion(array);
-    console.log(array);
+    // const array = [...inputQuestion];
+    // array[e.target.id-1].allChoice.splice(indexValue, 1,choiceArray)
+    // setInputQuestion(array);
+    // console.log(array);
   }
+
 
   return (
     <div>
@@ -206,165 +258,88 @@ function App() {
         <form>
           {/* header */}
           <Box className={classes.divHeader}>
-            <Box 
-            component="h5" 
-            fontSize="24px" 
-            display="inline" 
-            m={1}>
-              🦊 Foxbith Questionnaire
-            </Box>
+            <Box component="h5" fontSize="24px" display="inline" m={1}>🦊 Foxbith Questionnaire</Box>
           </Box>
           
           {/* btnSave */}
           <Box className={classes.divLine}></Box>
-            <Box 
-            className={classes.bgSave} 
-            display="flex" 
-            flexDirection="row-reverse" 
-            pt={1.5} pb={1.5} pr={3}>
-              <Button 
-              type="submit" 
-              variant="contained" 
-              className={classes.btnSave}>
+            <Box className={classes.bgSave} display="flex" flexDirection="row-reverse" pt={1.5} pb={1.5} pr={3}>
+              <Button type="submit" variant="contained" className={classes.btnSave}>
                 SAVE
               </Button>
-              <Button 
-              variant="contained" 
-              className={classes.btnCancel}>
+              <Button variant="contained" className={classes.btnCancel}>
                 CANCEL
               </Button>
             </Box>
           <Box className={classes.divLine}></Box>
 
           {/* question detail */}
-            <Box 
-            p={3} 
-            mt={3} ml={3} mr={3} 
-            bgcolor="#FFFFFF">
-              <Box 
-              component="h6" 
-              className={classes.h6}>
+            <Box p={3} mt={3} ml={3} mr={3} bgcolor="#FFFFFF">
+              <Box component="h6" className={classes.h6}>
                 Questionnaire Detail
               </Box>
-              <TextField 
-              className={classes.TextField} 
-              label="Name" 
-              variant="outlined" 
-              required/>
+              <TextField className={classes.TextField} label="Name" variant="outlined" required/>
             </Box>
-            <Box 
-            ml={3} mr={3} 
-            bgcolor="#FFFFFF">
-              <Box 
-              component="div" 
-              className={classes.divLine}>
-              </Box>
+            <Box ml={3} mr={3} bgcolor="#FFFFFF">
+              <Box component="div" className={classes.divLine}></Box>
             </Box>
 
-
-            {inputQuestion.map((x, index) => (
-              <Box 
-              ml={3} mr={3} 
-              bgcolor="#FFFFFF">
-                
-                <Box 
-                pt={3} pl={3} pr={3}>
+            {console.log(inputQuestion)}
+            {inputQuestion.map((x, i) =>
+            { 
+              const allChoice = x.allChoice;
+              {console.log("1",allChoice)}
+              return (
+              <Box ml={3} mr={3} bgcolor="#FFFFFF"key={x.Qid}>
+                <Box pt={3} pl={3} pr={3}>
                   <Box>
-                    <Box 
-                    component="h6"
-                    className={classes.h6}>
+                    <Box component="h6" className={classes.h6}>
                       Question {x.Qid}
                       </Box>
                     <TextField 
                     className={classes.TextField} 
                     label="Question" 
                     variant="outlined"
-                    name={index+1}
-                    onChange={handleChangeQuestionHeader}
-                    // value={x.values[{index}]}
+                    id={i+1}
+                    onChange={(e) => handleChangeQuestionHeader(e, i)}
+                    value={x.questionHeader}
                     required/> 
                   </Box>
+                  {/* {console.log(inputQuestion[i].allChoice)} */}
 
-                  {inputChoice.map((y, index) => (
-                  <Box 
-                  display="flex" 
-                  flexDirection="row" 
-                  alignItems="center"
-                  mt={3}>
+                  {allChoice.map((y, j) => (
+                  <Box display="flex" flexDirection="row" alignItems="center"key={j} mt={3}>
+                    {console.log(y)}
                     <Radio 
-                    checked={selectedValue == index+1} 
-                    value={index+1}
+                    checked={selectedValue === j+1} 
+                    value={j+1}
                     color="primary" 
                     name="radio-question" 
                     onChange={handleChange}/>
-                    {checkRadio == index+1 ? 
                     <TextField 
-                    className={classes.TextField} 
+                    className={classes.TextField}
                     label={"Description"} 
                     variant="outlined" 
                     helperText="The answer is correct"
-                    id={index+1}
-                    value={x.choice}
-                    onChange={handleChangeValue}
+                    id={x.Qid}
+                    value={x.allChoice[y.choice]}
+                    onChange={(e) => handleChangeValue(e, j)}
                     required/>
-                    : 
-                    <TextField 
-                    className={classes.TextField}
-                    label="Description" 
-                    variant="outlined"
-                    id={index+1}
-                    value={x.choice}
-                    onChange={handleChangeValue}
-                    required/>}
                     <DeleteOutlineIcon style={{marginLeft: '24px'}}
                     onClick={()=> {
-                      const choiceArray = [...inputChoice];
-                      choiceArray.splice(index, 1);
-                      setInputChoice(choiceArray);
-                      console.log(choiceArray);
-                    } 
+                      // const choiceArray = [...inputChoice];
+                      // choiceArray.splice(i, 1);
+                      // setInputChoice(choiceArray);
+                      // console.log(choiceArray);
+                    }
                     }/>
                   </Box>
                   ))}
-
-                  {/* <Box 
-                  display="flex" 
-                  flexDirection="row" 
-                  alignItems="center" 
-                  mt={3}>
-                    <Radio 
-                    checked={selectedValue === '2'} 
-                    value='2'
-                    color="primary" 
-                    name="radio-question" 
-                    onChange={handleChange}/>
-                    {checkRadio == 2 ? 
-                    <TextField 
-                    className={classes.TextField} 
-                    label="Description" 
-                    variant="outlined" 
-                    helperText="The answer is correct" 
-                    required/>
-                    : 
-                    <TextField 
-                    className={classes.TextField} 
-                    label="Description" 
-                    variant="outlined" 
-                    required/>}
-                    <DeleteOutlineIcon style={{marginLeft: '24px'}}/>
-                  </Box> */}
                 </Box>
 
                 {/* add choice */}
-                <Box 
-                display="flex" 
-                alignItems="center" 
-                p={3}
-                bgcolor="#FFFFFF">
-                  <Box 
-                  display="flex"
-                  alignItems="center"
-                  className={classes.elementCursor}>
+                <Box display="flex" alignItems="center" p={3}bgcolor="#FFFFFF">
+                  <Box display="flex"alignItems="center"className={classes.elementCursor}>
                     <AddIcon style={{ color: '#FF5C00' }} />
                     <Typography
                     className={classes.p}
@@ -376,31 +351,14 @@ function App() {
                 </Box>
 
                 {/* duplicate and delete */}
-                <Box 
-                component="div" 
-                display="flex" 
-                alignItems="center" 
-                pl={3} pr={3}>
-
-                  <Box 
-                  component="div" 
-                  className={classes.divLine}>
-                  </Box>
+                <Box component="div" display="flex" alignItems="center" pl={3} pr={3}>
+                  <Box component="div" className={classes.divLine}></Box>
                 </Box>
                 
-                <Box
-                display="flex" 
-                alignItems="center" 
-                p={3} 
-                bgcolor="#FFFFFF">
-                  <Box
-                  display="flex" 
-                  alignItems="center"
-                  mr={3.5}
-                  className={classes.elementCursor}>
+                <Box display="flex" alignItems="center" p={3} bgcolor="#FFFFFF">
+                  <Box display="flex" alignItems="center"mr={3.5}className={classes.elementCursor}>
                     <FileCopyOutlinedIcon />
-                    <Typography 
-                    className={classes.p1}>
+                    <Typography className={classes.p1}>
                       DUPLICATE
                     </Typography>
                   </Box>
@@ -411,14 +369,14 @@ function App() {
                   className={classes.elementCursor}
                   onClick={()=> {
                     // const array = [...inputQuestion]
-                    // const Selectindex = inputQuestion.indexOf(index)
+                    // const Selectindex = inputQuestion.indexOf(i)
                     // array.splice(Selectindex, 1)
                     // setInputQuestion(array)
 
                     const array = [...inputQuestion];
-                    array.splice(index, 1);
-                    setInputQuestion(array);
-                    console.log(array);
+                    array.splice(i, 1);
+                    // setInputQuestion(array);
+                    // console.log(array);
                   }
                     
                   }>
@@ -436,19 +394,14 @@ function App() {
                   </Box>
                 </Box>
               </Box>
-            ))}
+            )})}
 
             {/* Add question */}
-              <Box 
-              display="flex" 
-              alignItems="center" 
-              p={3} 
-              ml={3} mr={3} 
-              bgcolor="#FFFFFF">
+              <Box display="flex" alignItems="center" p={3} ml={3} mr={3} bgcolor="#FFFFFF">
                 <Button 
                 variant="contained" 
                 className={classes.btnAddQuestion}
-                onClick={handleChangeClick}>
+                onClick={handleAddQuestion}>
                   <AddIcon style={{ color: '#FF5C00' }}/>
                   ADD QUESTION
                 </Button>
