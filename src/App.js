@@ -80,14 +80,6 @@ function App() {
   });
   const classes = useStyles();
 
-  // for radio change
-  const [selectedValue, setSelectedValue] = useState(1);
-  const handleChange = (event) => {
-    setSelectedValue(+event.target.value);
-    // console.log(selectedValue);
-  };
-  const checkRadio = selectedValue;
-
   // // Add question
   // const [inputQuestion, setInputQuestion] = useState([1]);
   // const handleAddQuestion = () => {
@@ -114,7 +106,7 @@ function App() {
   const [inputQuestion, setInputQuestion] = useState([{
     Qid: 1,
     questionHeader: '',
-    allChoice: [{choice: ''}]
+    allChoice: [{choice: '', answer: 'true'}]
   }]);
   const handleAddQuestion = () => {
     const array = [...inputQuestion];
@@ -125,7 +117,7 @@ function App() {
     array.push({
       Qid: array.length+1,
       questionHeader: '',
-      allChoice: [{choice: ''}]
+      allChoice: [{choice: '', answer: 'true'}]
     });
     setInputQuestion(array);
     // setInputChoice(choiceArray);
@@ -171,24 +163,28 @@ function App() {
     // console.log(array);
   }
 
-  const handleAddChoice = (e) => {
-    // const array = [...inputQuestion];
+  const handleAddChoice = (e, i) => {
+    const array = [...inputQuestion];
+    array[i].allChoice.push({choice: '', answer:'false'});
+    setInputQuestion(array);
+
+    // setInputQuestion(prev => { //ถ้าใช้อันนี้จะเกิดบัค add choice & delete choice เเละเมื่อ add ใหม่จะ add ซ้ำกัน 2 รอบ
+    //   const inputPrev = [...prev];
+    //   // newPrev.allChoice.push(newPrev[Qid].allChoice[{choice: ''}]); // โครตผิด คิดได้ไง push อะไรก็ไม่รู้
+    //   inputPrev[i].allChoice.push({choice: ''});
+    //   console.log("inputPrev",inputPrev);
+    //   return inputPrev;
+    // })
+    
     // const choiceArray = [...inputChoice];
-    const Qid = e.target.id-1;
-    console.log(Qid);
+    // const Qid = e.target.id-1;
+    // console.log("Qid",Qid);
 
     // console.log("New Question1",array)
     // array[Qid].allChoice.push(choiceArray[0]);
     // console.log("New Question2",array)
     // choiceArray.push({choice: ''});
     // setInputQuestion(array);
-    
-    setInputQuestion(prev => {
-      const newPrev = [...prev];
-      newPrev.push(newPrev[Qid].allChoice[{choice: ''}]);
-      // console.log(newPrev);
-      return newPrev;
-    })
 
     // console.log(choiceArray)
     // array[Qid].allChoice.push(choiceArray[0]);
@@ -214,7 +210,7 @@ function App() {
   }
   
   const handleChangeValue = (e, j) => {
-    // const Qid = e.target.id-1;
+    const Qid = e.target.id-1;
     // inputChoice.push({choice: e.target.value})
     
     // const array = [...inputQuestion];
@@ -222,17 +218,19 @@ function App() {
     // setInputQuestion(array);
 
     // choiceArray[0]
-    console.log("indexvalue",j);
+
+    // console.log("indexvalue",j);
+
     // setInputQuestion[i].allChoice[j].splice(j,1 ,{choice: e.target.value});
 
     // console.log(Qid);
     setInputQuestion(prev => {
-      // const InputChoice = [...prev]; //newInputChoice[Qid].allChoice[j].
-      // const newInputChoice = InputChoice.allChoice.splice(j,1 ,{choice: e.target.value});
+      const newInputChoice = [...prev]; //newInputChoice[Qid].allChoice[j].
+      newInputChoice[Qid].allChoice.splice(j,1 ,{choice: e.target.value});
       // console.log(newInputChoice);
       // newInputChoice.splice(j,1 ,{choice: e.target.value});
       console.log("index",j, prev);
-      // return newInputChoice;
+      return newInputChoice;
     });
 
 
@@ -250,6 +248,19 @@ function App() {
     // setInputQuestion(array);
     // console.log(array);
   }
+
+  // for radio change
+  const [selectedValue, setSelectedValue] = useState(1);
+  const handleChangeRadio = (e, j) => {
+    setSelectedValue(e.target.value);
+    console.log(selectedValue);
+
+    // const Qid = e.target.id -1;
+    // const array = [...inputQuestion];
+    // array[Qid].allChoice.splice(j,1 ,{choice: e.target.value, answer: 'true'});
+    // setInputQuestion(array);
+  };
+  const checkRadio = selectedValue;
 
 
   return (
@@ -284,11 +295,11 @@ function App() {
               <Box component="div" className={classes.divLine}></Box>
             </Box>
 
-            {console.log(inputQuestion)}
+            {console.log("inputQuestion",inputQuestion)}
             {inputQuestion.map((x, i) =>
             { 
               const allChoice = x.allChoice;
-              {console.log("1",allChoice)}
+              {console.log("allChoice",allChoice)}
               return (
               <Box ml={3} mr={3} bgcolor="#FFFFFF"key={x.Qid}>
                 <Box pt={3} pl={3} pr={3}>
@@ -309,28 +320,39 @@ function App() {
 
                   {allChoice.map((y, j) => (
                   <Box display="flex" flexDirection="row" alignItems="center"key={j} mt={3}>
-                    {console.log(y)}
+                    {console.log("y",allChoice[j].choice)}
+                    {console.log("answer",allChoice[j].answer)}
+                    {console.log("selectedValue",x.Qid+''+j)}
                     <Radio 
-                    checked={selectedValue === j+1} 
-                    value={j+1}
+                    // checked={allChoice[j].answer === 'true'} 
+                    checked={selectedValue === x.Qid+''+j} 
                     color="primary" 
-                    name="radio-question" 
-                    onChange={handleChange}/>
+                    name="radio-question"
+                    value={x.Qid+''+j}
+                    id={x.Qid}
+                    onChange={(e) => handleChangeRadio(e, j)}/>
                     <TextField 
                     className={classes.TextField}
                     label={"Description"} 
                     variant="outlined" 
                     helperText="The answer is correct"
                     id={x.Qid}
-                    value={x.allChoice[y.choice]}
+                    value={allChoice[j].choice}
                     onChange={(e) => handleChangeValue(e, j)}
                     required/>
                     <DeleteOutlineIcon style={{marginLeft: '24px'}}
                     onClick={()=> {
-                      // const choiceArray = [...inputChoice];
-                      // choiceArray.splice(i, 1);
-                      // setInputChoice(choiceArray);
-                      // console.log(choiceArray);
+                      // const array = [...inputQuestion];
+                      // array[i].allChoice.splice(j,1);
+                      // setInputQuestion(array);
+                      // console.log("delete",array);
+                      
+                      setInputQuestion(prev =>{
+                        const newPrev = [...prev]
+                        newPrev[i].allChoice.splice(j,1);
+                        console.log("deletePrev",newPrev)
+                        return newPrev;
+                      })
                     }
                     }/>
                   </Box>
@@ -344,7 +366,7 @@ function App() {
                     <Typography
                     className={classes.p}
                     id={x.Qid}
-                    onClick={handleAddChoice}>
+                    onClick={(e) => handleAddChoice(e, i)}>
                       ADD CHOICE
                     </Typography>
                   </Box>
@@ -375,7 +397,7 @@ function App() {
 
                     const array = [...inputQuestion];
                     array.splice(i, 1);
-                    // setInputQuestion(array);
+                    setInputQuestion(array);
                     // console.log(array);
                   }
                     
