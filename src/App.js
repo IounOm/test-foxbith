@@ -177,7 +177,12 @@ function App() {
     array[i].allChoice.find((element, indexI) => {
       const find = array[i].allChoice[indexI].radioCheck;
       console.log("find",find);
-      if(indexI <= 0){
+      console.log("length",indexI);
+      if(indexI === true <= 0){
+        array[i].allChoice[0].radioCheck = true;
+        setInputQuestion(array);
+      }
+      if(array[i].allChoice.length === 1){
         array[i].allChoice[0].radioCheck = true;
         setInputQuestion(array);
       }
@@ -546,8 +551,16 @@ function App() {
                           const array = [...inputQuestion];
                           const find = allChoice[indexJ].radioCheck;
                           console.log("find",find);
-                          if(find === true <= 0){
+                          if(find <= 0){
                             allChoice[0].radioCheck = true;
+                            setInputQuestion(array);
+                          }
+                          else if(find === true){
+                            allChoice[0].radioCheck = true;
+                            setInputQuestion(array);
+                          }
+                          else{
+                            allChoice[0].radioCheck = false;
                             setInputQuestion(array);
                           }
                         })
