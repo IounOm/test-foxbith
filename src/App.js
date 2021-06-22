@@ -379,14 +379,14 @@ function App() {
   function clearArray() {
     const array = [{
       qId: 1,
-      questionHeader: '',
+      questionHeader: "",
       allChoice: [{Description: '', radioCheck: true, choiceError: false}],
       questionError : false
     }]
     const questionDetail = [{detail: '', headerError: false}];
     setInputQuestion(array);
     setQuestionDetail(questionDetail);
-    return array,questionDetail;
+    // return array,questionDetail;
   }
 
   return (
@@ -421,7 +421,7 @@ function App() {
               className={classes.TextField} 
               label="Name" 
               variant="outlined"
-              value={questionDetail.detail}
+              value={questionDetail[0].detail}
               onChange={handleOnChangeHeader}
               // {...register("questionDetail", { required: true })} // สำหรับใช้เช็ค validate อีกเเบบ โดยใช้ react hook
               // error={errors.questionDetail}
@@ -436,6 +436,7 @@ function App() {
             </Box>
 
             {console.log("inputQuestion",inputQuestion)}
+            {console.log("inputDetail",questionDetail)}
             {inputQuestion.map((x, i) =>
             { 
               const allChoice = x.allChoice;
@@ -549,10 +550,16 @@ function App() {
                           //   // allChoice[0].radioCheck = false;
                           //   // setInputQuestion(array);
                           // }
-                          if(allChoice[j].radioCheck === true && find === true){
+                          if(allChoice[j].radioCheck === true && find === true && allChoice[0].radioCheck !== true){
                             allChoice[0].radioCheck = true;
                             // setInputQuestion(array);
                             console.log("array",array);
+                          }
+                          else if(allChoice[j].radioCheck === true && find === true && allChoice[0].radioCheck === true && allChoice.length !== 1){
+                            allChoice[1].radioCheck = true;
+                          }
+                          else if(allChoice.length === 1){
+                            
                           }
                         })
 
@@ -611,7 +618,7 @@ function App() {
                         console.log("allMap", newDup);
                         
                         const newPrev = {
-                          qId: inputPrev.length+1,
+                          qId: Math.max.apply(Math, inputPrev.map(function(o) { return o.qId+1; })),
                           questionHeader: x.questionHeader,
                           allChoice: newDup,
                           questionError: x.questionError
