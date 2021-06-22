@@ -174,19 +174,12 @@ function App() {
     array[i].allChoice.push({Description: '', radioCheck:false, choiceError: false});
     setInputQuestion(array);
 
-    array[i].allChoice.find((element, indexI) => {
-      const find = array[i].allChoice[indexI].radioCheck;
-      console.log("find",find);
-      console.log("length",indexI);
-      if(indexI === true <= 0){
-        array[i].allChoice[0].radioCheck = true;
-        setInputQuestion(array);
-      }
+      console.log("length",array[i].allChoice.length);
+
       if(array[i].allChoice.length === 1){
         array[i].allChoice[0].radioCheck = true;
         setInputQuestion(array);
       }
-    })
 
     // setInputQuestion(prev => { //ถ้าใช้อันนี้จะเกิดบัค add Description & delete Description เเละเมื่อ add ใหม่จะ add ซ้ำกัน 2 รอบ
     //   const inputPrev = [...prev];
@@ -540,32 +533,36 @@ function App() {
                         // setInputQuestion(array);
                         // console.log("delete",array);
                         
+                        // setInputQuestion(prev =>{
+                        //   const newPrev = [...prev]
+                        //   newPrev[i].allChoice.splice(j,1);
+                        //   console.log("deletePrev",newPrev);
+                        //   return newPrev;
+                        // })
+                        
+                        allChoice.find((element, indexJ) => {
+                          const array = [...inputQuestion];
+                          const find = allChoice[indexJ].radioCheck;
+                          console.log("findDel",find);
+                          console.log("j",allChoice[j].radioCheck);
+                          // if(find === false){
+                          //   // allChoice[0].radioCheck = false;
+                          //   // setInputQuestion(array);
+                          // }
+                          if(allChoice[j].radioCheck === true && find === true){
+                            allChoice[0].radioCheck = true;
+                            // setInputQuestion(array);
+                            console.log("array",array);
+                          }
+                        })
+
                         setInputQuestion(prev =>{
                           const newPrev = [...prev]
                           newPrev[i].allChoice.splice(j,1);
                           console.log("deletePrev",newPrev);
                           return newPrev;
                         })
-                        
-                        allChoice.find((element, indexJ) => {
-                          const array = [...inputQuestion];
-                          const find = allChoice[indexJ].radioCheck;
-                          console.log("find",find);
-                          if(find <= 0){
-                            allChoice[0].radioCheck = true;
-                            setInputQuestion(array);
-                          }
-                          else if(find === true){
-                            allChoice[0].radioCheck = true;
-                            setInputQuestion(array);
-                          }
-                          else{
-                            allChoice[0].radioCheck = false;
-                            setInputQuestion(array);
-                          }
-                        })
-                      }
-                      }
+                      }}
                     >
                       <DeleteOutlineIcon />
                     </IconButton>
